@@ -12,7 +12,7 @@ var gameOver = false
 onready var finalScoreContainer = $finalScoreContainer
 onready var finalScoreText = $finalScoreContainer/CenterContainer/VBoxContainer/HBoxContainer/finalScoreText
 onready var mainMenu = load("res://MainMenu.tscn")
-
+var moved = false
 
 func _ready():
 	applePos = placeApple()
@@ -49,11 +49,20 @@ func deleteTiles(id:int):
 		
 
 func _input(_event):
-	if (Input.is_action_just_pressed("ui_up") && snakeDirection != Vector2(0, 1)): snakeDirection = Vector2(0, -1)
-	if (Input.is_action_just_pressed("ui_right") && snakeDirection != Vector2(-1, 0)): snakeDirection = Vector2(1, 0)
-	if (Input.is_action_just_pressed("ui_left") && snakeDirection != Vector2(1, 0)): snakeDirection = Vector2(-1, 0)
-	if (Input.is_action_just_pressed("ui_down") && snakeDirection != Vector2(0, -1)): snakeDirection = Vector2(0, 1)
-	if (Input.is_action_just_released("ui_select") && gameOver): restartGame()
+	if (Input.is_action_just_pressed("ui_up") && snakeDirection != Vector2(0, 1) && moved): 
+		snakeDirection = Vector2(0, -1) 
+		moved = false
+	if (Input.is_action_just_pressed("ui_right") && snakeDirection != Vector2(-1, 0)  && moved): 
+		snakeDirection = Vector2(1, 0) 
+		moved = false
+	if (Input.is_action_just_pressed("ui_left") && snakeDirection != Vector2(1, 0)  && moved): 
+		snakeDirection = Vector2(-1, 0) 
+		moved = false
+	if (Input.is_action_just_pressed("ui_down") && snakeDirection != Vector2(0, -1)  && moved): 
+		snakeDirection = Vector2(0, 1) 
+		moved = false
+	if (Input.is_action_just_released("ui_select") && gameOver): 
+		restartGame()
 
 func moveSnake():
 	var bodyCopy = snakeBody.slice(0, snakeBody.size() - 2)
@@ -70,6 +79,7 @@ func moveSnake():
 	deleteTiles(SNAKE)
 	bodyCopy.insert(0, newHead)
 	snakeBody = bodyCopy
+	moved = true
 	return true
 
 func _on_Timer_timeout():
