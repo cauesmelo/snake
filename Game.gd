@@ -14,8 +14,12 @@ var timer
 func _ready():
 	applePos = placeApple()
 	timer = get_node("Timer")
-	timer.set_wait_time(0.2)
-	
+	if Global.difficult == 1:
+		timer.set_wait_time(0.2)
+	elif Global.difficult == 2:
+		timer.set_wait_time(0.1)	
+	elif Global.difficult == 0:
+		timer.set_wait_time(0.3)
 
 func placeApple():
 	rng.randomize()
