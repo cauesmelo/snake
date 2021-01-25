@@ -1,7 +1,6 @@
 extends Control
 
 signal updateScore
-signal GameOver
 
 onready var scoreText = $MarginContainer/HBoxContainer/HBoxContainer/scoreText
 onready var difficultyText = $MarginContainer/HBoxContainer/HBoxContainer2/difficultyText
@@ -16,7 +15,9 @@ func _ready():
 		difficultyText.text = "Hard"
 	
 	gameNode.connect("updateScore", self, "onUpdateScore")
-	gameNode.connect("GameOver", self, "onGameOver")
+
+
 func onUpdateScore():
 	scoreText.text = str(Global.score)
-	print("atualizando score..", Global.score)
+
+

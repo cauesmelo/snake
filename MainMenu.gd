@@ -36,4 +36,4 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_accept"):
 		Global.difficulty = currentSelect
 		get_parent().add_child(mainGame.instance())
-		queue_free()
+		get_node(".").free()

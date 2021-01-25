@@ -8,8 +8,10 @@ var snakeDirection = Vector2(1, 0)
 var rng = RandomNumberGenerator.new()
 var timer
 signal updateScore
-signal gameOver
-
+var gameOver = false
+onready var finalScoreContainer = $finalScoreContainer
+onready var finalScoreText = $finalScoreContainer/CenterContainer/VBoxContainer/HBoxContainer/finalScoreText
+onready var mainMenu = load("res://MainMenu.tscn")
 
 
 func _ready():
@@ -51,6 +53,7 @@ func _input(_event):
 	if (Input.is_action_just_pressed("ui_right") && snakeDirection != Vector2(-1, 0)): snakeDirection = Vector2(1, 0)
 	if (Input.is_action_just_pressed("ui_left") && snakeDirection != Vector2(1, 0)): snakeDirection = Vector2(-1, 0)
 	if (Input.is_action_just_pressed("ui_down") && snakeDirection != Vector2(0, -1)): snakeDirection = Vector2(0, 1)
+	if (Input.is_action_just_released("ui_select") && gameOver): restartGame()
 
 func moveSnake():
 	var bodyCopy = snakeBody.slice(0, snakeBody.size() - 2)
@@ -70,15 +73,15 @@ func moveSnake():
 	return true
 
 func _on_Timer_timeout():
-	drawApple()
-	if(checkApple()):
-		if(!growSnake()):
-			gameOver()
-	else:
-		if(!moveSnake()):
-			gameOver()
-	
-	drawSnake()
+	if(!gameOver):
+		drawApple()
+		if(checkApple()):
+			if(!growSnake()):
+				gameOver()
+		else:
+			if(!moveSnake()):
+				gameOver()
+		drawSnake()
 
 
 
@@ -98,5 +101,14 @@ func growSnake():
 	return collision
 
 func gameOver():
-	emit_signal("gameOver")
+	gameOver = true
+	deleteTiles(APPLE)
+	deleteTiles(SNAKE)
+	finalScoreContainer.visible = true
+	finalScoreText.text = str(Global.score)
+
+func restartGame():
+	Global.score = 0
+	get_parent().add_child(mainMenu.instance())
+	queue_free()
 
