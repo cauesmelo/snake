@@ -1,4 +1,5 @@
 extends Node
 
-var difficult = 0
+var difficulty = 0
 
+var score = 0

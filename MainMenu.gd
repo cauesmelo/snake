@@ -1,6 +1,6 @@
 extends MarginContainer
 
-const mainGame = preload("res://Game.tscn")
+const mainGame = preload("res://GameScreen.tscn")
 
 onready var selectorOne = $CenterContainer/VBoxContainer/CenterContainer2/VBoxContainer/CenterContainer/HBoxContainer/arrow
 onready var selectorTwo = $CenterContainer/VBoxContainer/CenterContainer2/VBoxContainer/CenterContainer2/HBoxContainer/arrow
@@ -34,6 +34,6 @@ func _process(delta):
 			setSelect(currentSelect)
 	
 	if Input.is_action_just_pressed("ui_accept"):
-		Global.difficult = currentSelect
+		Global.difficulty = currentSelect
 		get_parent().add_child(mainGame.instance())
 		queue_free()

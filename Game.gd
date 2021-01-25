@@ -2,23 +2,24 @@ extends Node2D
 
 const SNAKE = 1
 const APPLE = 0
-var score = 0
 var applePos
 var snakeBody = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
 var snakeDirection = Vector2(1, 0)
 var rng = RandomNumberGenerator.new()
 var timer
+signal updateScore
+signal gameOver
 
 
 
 func _ready():
 	applePos = placeApple()
 	timer = get_node("Timer")
-	if Global.difficult == 1:
+	if Global.difficulty == 1:
 		timer.set_wait_time(0.2)
-	elif Global.difficult == 2:
+	elif Global.difficulty == 2:
 		timer.set_wait_time(0.1)	
-	elif Global.difficult == 0:
+	elif Global.difficulty == 0:
 		timer.set_wait_time(0.3)
 
 func placeApple():
@@ -62,6 +63,7 @@ func moveSnake():
 		return false
 	if(newHead.y < 0 || newHead.y > 19):
 		return false
+	
 	deleteTiles(SNAKE)
 	bodyCopy.insert(0, newHead)
 	snakeBody = bodyCopy
@@ -77,12 +79,14 @@ func _on_Timer_timeout():
 			gameOver()
 	
 	drawSnake()
-		
+
+
 
 func checkApple():
 	if applePos == snakeBody[0]:
 		applePos = placeApple()
-		score += 1
+		Global.score += 1
+		emit_signal("updateScore")
 		return true
 	return false
 
@@ -94,5 +98,5 @@ func growSnake():
 	return collision
 
 func gameOver():
-	print("game over")
+	emit_signal("gameOver")
 
