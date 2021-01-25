@@ -102,8 +102,7 @@ func growSnake():
 
 func gameOver():
 	gameOver = true
-	deleteTiles(APPLE)
-	deleteTiles(SNAKE)
+	$SnakeApple.visible = false
 	finalScoreContainer.visible = true
 	finalScoreText.text = str(Global.score)
 
